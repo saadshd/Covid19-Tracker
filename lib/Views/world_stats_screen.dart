@@ -47,10 +47,12 @@ class _WorldStatsScreenState extends State<WorldStatsScreen> with TickerProvider
               if(!snapshot.hasData){
                 return Expanded(
                   flex: 1,
-                  child: SpinKitFadingCircle(
-                    color: Colors.white,
-                    size: 50.0,
-                    controller: _controller,
+                  child: Center(
+                    child: SpinKitFadingCircle(
+                      color: Colors.green,
+                      size: 50.0,
+                      controller: _controller,
+                    ),
                   ),
                 );
               } else {
