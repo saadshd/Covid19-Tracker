@@ -25,5 +25,10 @@ class WorldStatesViewModel{
       throw Exception('Error');
     }
   }
+
+  Future<void> fetchData() async {
+    fetchWorldRecords();
+    fetchCountriesRecords();
+  }
 }
 
