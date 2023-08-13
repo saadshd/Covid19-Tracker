@@ -39,6 +39,16 @@ class _CountriesScreenState extends State<CountriesScreen> {
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(50.0)
                 ),
+                suffixIcon: searchController.text.isEmpty ? const Icon(Icons.search) :
+                    GestureDetector(
+                      onTap: (){
+                        searchController.text = "";
+                        setState(() {
+
+                        });
+                      },
+                      child: const Icon(Icons.clear),
+                    ),
               ),
             ),
             Expanded(
@@ -59,6 +69,7 @@ class _CountriesScreenState extends State<CountriesScreen> {
                                    title: Container(height: 10, width: 80, color: Colors.white,),
                                    subtitle: Container(height: 10, width: 80, color: Colors.white,),
                                  ),
+                                 Container(height: 5, width: MediaQuery.sizeOf(context).width, color: Colors.white,)
                                ],
                              ),
                            );
@@ -97,6 +108,7 @@ class _CountriesScreenState extends State<CountriesScreen> {
                                     subtitle: Text('Cases: ${snapshot.data![index]['cases']}'),
                                   ),
                                 ),
+                                const Divider(),
                               ],
                             );
                           } else if(name.toLowerCase().contains(searchController.text.toLowerCase())){
@@ -127,6 +139,7 @@ class _CountriesScreenState extends State<CountriesScreen> {
                                     subtitle: Text('Cases: ${snapshot.data![index]['cases']}'),
                                   ),
                                 ),
+                                const Divider(),
                               ],
                             );
                           } else {
