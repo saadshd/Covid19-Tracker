@@ -1,4 +1,5 @@
 import 'package:covid19_tracker/Model/world_stats_model.dart';
+import 'package:covid19_tracker/Views/Widgets/reuseable_row.dart';
 import 'package:covid19_tracker/Views/countries_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:pie_chart/pie_chart.dart';
@@ -118,28 +119,5 @@ class _WorldStatsScreenState extends State<WorldStatsScreen> with TickerProvider
   }
 }
 
-class ReuseableRow extends StatelessWidget {
-  String title, value;
-  ReuseableRow({super.key, required this.title, required this.value});
 
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(10,10,10,5),
-      child: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(title),
-              Text(value),
-            ],
-          ),
-          const SizedBox(height: 5,),
-          const Divider()
-        ],
-      ),
-    );
-  }
-}
 

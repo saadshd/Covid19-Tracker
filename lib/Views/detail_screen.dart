@@ -1,4 +1,4 @@
-import 'package:covid19_tracker/Views/world_stats_screen.dart';
+import 'package:covid19_tracker/Views/Widgets/reuseable_row.dart';
 import 'package:flutter/material.dart';
 
 class DetailScreen extends StatefulWidget {
