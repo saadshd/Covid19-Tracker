@@ -30,7 +30,7 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
     super.initState();
 
     Timer(const Duration(seconds: 5),
-        () => Navigator.push(context, MaterialPageRoute(builder: (context) => const WorldStatsScreen()))
+        () => Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const WorldStatsScreen()))
     );
   }
 
@@ -64,9 +64,9 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
             SizedBox(height: MediaQuery.sizeOf(context).height * .08,),
             Align(
               alignment: Alignment.center,
-                child: Text('Covid 19\nTracker',
+                child: Text('COVID-19\nTracker',
                   textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.headlineLarge,
+                  style: Theme.of(context).textTheme.headlineSmall!.copyWith(fontWeight: FontWeight.bold),
                 ),
             ),
           ],
