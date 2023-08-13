@@ -1,9 +1,9 @@
 import 'package:covid19_tracker/Model/world_stats_model.dart';
+import 'package:covid19_tracker/ViewModel/world_states_view_model.dart';
 import 'package:covid19_tracker/Views/Widgets/reuseable_row.dart';
 import 'package:covid19_tracker/Views/countries_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:pie_chart/pie_chart.dart';
-import 'package:covid19_tracker/Services/stats_services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class WorldStatsScreen extends StatefulWidget {
@@ -35,7 +35,7 @@ class _WorldStatsScreenState extends State<WorldStatsScreen> with TickerProvider
 
   @override
   Widget build(BuildContext context) {
-    StatsServices statsServices = StatsServices();
+    WorldStatesViewModel newWorldStatesViewModel = WorldStatesViewModel();
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.surfaceVariant,
@@ -43,7 +43,7 @@ class _WorldStatsScreenState extends State<WorldStatsScreen> with TickerProvider
       ),
       body: SingleChildScrollView(
           child: FutureBuilder(
-            future: statsServices.fetchWorldStatsRecords(),
+            future: newWorldStatesViewModel.fetchWorldRecords(),
               builder: (context,AsyncSnapshot<WorldStatsModel> snapshot){
               if(!snapshot.hasData){
                 return Expanded(

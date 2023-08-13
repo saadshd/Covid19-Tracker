@@ -1,4 +1,4 @@
-import 'package:covid19_tracker/Services/stats_services.dart';
+import 'package:covid19_tracker/ViewModel/world_states_view_model.dart';
 import 'package:covid19_tracker/Views/detail_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
@@ -16,7 +16,7 @@ class _CountriesScreenState extends State<CountriesScreen> {
 
   @override
   Widget build(BuildContext context) {
-    StatsServices statsServices = StatsServices();
+    WorldStatesViewModel newWorldStatesViewModel = WorldStatesViewModel();
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.surfaceVariant,
@@ -53,7 +53,7 @@ class _CountriesScreenState extends State<CountriesScreen> {
             ),
             Expanded(
                 child: FutureBuilder(
-                  future: statsServices.countriesListApi(),
+                  future: newWorldStatesViewModel.fetchCountriesRecords(),
                   builder: (context, AsyncSnapshot<List<dynamic>> snapshot){
                     if(!snapshot.hasData){
                      return ListView.builder(
