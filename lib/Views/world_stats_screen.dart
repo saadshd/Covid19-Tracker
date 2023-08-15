@@ -43,80 +43,77 @@ class _WorldStatsScreenState extends State<WorldStatsScreen> with TickerProvider
       ),
       body: RefreshIndicator(
         onRefresh: newWorldStatesViewModel.fetchData,
-        child: SingleChildScrollView(
-            child: FutureBuilder(
-              future: newWorldStatesViewModel.fetchWorldRecords(),
-                builder: (context,AsyncSnapshot<WorldStatsModel> snapshot){
-                if(!snapshot.hasData){
-                  return Expanded(
-                    flex: 1,
-                    child: Center(
-                      child: SpinKitFadingCircle(
-                        color: Colors.green,
-                        size: 50.0,
-                        controller: _controller,
-                      ),
-                    ),
-                  );
-                } else {
-                  return Padding(
-                    padding: const EdgeInsets.all(10),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        Card(
-                          child: Padding(
-                            padding: const EdgeInsets.all(15.0),
-                            child: PieChart(
-                              dataMap: {
-                                "Total": double.parse(snapshot.data!.cases.toString()),
-                                "Recovered": double.parse(snapshot.data!.recovered.toString()),
-                                "Deaths": double.parse(snapshot.data!.deaths.toString()),
-                              },
-                              chartValuesOptions: const ChartValuesOptions(
-                                showChartValuesInPercentage: true
+        child: Center(
+          child: SingleChildScrollView(
+              child: FutureBuilder(
+                future: newWorldStatesViewModel.fetchWorldRecords(),
+                  builder: (context,AsyncSnapshot<WorldStatsModel> snapshot){
+                  if(!snapshot.hasData){
+                    return SpinKitFadingCircle(
+                      color: Colors.green,
+                      size: 50.0,
+                      controller: _controller,
+                    );
+                  } else {
+                    return Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Card(
+                            child: Padding(
+                              padding: const EdgeInsets.all(15.0),
+                              child: PieChart(
+                                dataMap: {
+                                  "Total": double.parse(snapshot.data!.cases.toString()),
+                                  "Recovered": double.parse(snapshot.data!.recovered.toString()),
+                                  "Deaths": double.parse(snapshot.data!.deaths.toString()),
+                                },
+                                chartValuesOptions: const ChartValuesOptions(
+                                  showChartValuesInPercentage: true
+                                ),
+                                chartRadius: MediaQuery.sizeOf(context).height / 5,
+                                legendOptions: const LegendOptions(
+                                    legendPosition: LegendPosition.left
+                                ),
+                                animationDuration: const Duration(milliseconds: 1200),
+                                chartType: ChartType.ring,
+                                colorList: colorList,
                               ),
-                              chartRadius: MediaQuery.sizeOf(context).height / 5,
-                              legendOptions: const LegendOptions(
-                                  legendPosition: LegendPosition.left
-                              ),
-                              animationDuration: const Duration(milliseconds: 1200),
-                              chartType: ChartType.ring,
-                              colorList: colorList,
                             ),
                           ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 10),
-                          child: Text('Worldwide Stats',
-                            style: Theme.of(context).textTheme.titleLarge!.copyWith(fontWeight: FontWeight.bold),),
-                        ),
-                        Card(
-                          child: Column(
-                            children: [
-                              ReuseableRow(title: 'Total', value: snapshot.data!.cases.toString()),
-                              ReuseableRow(title: 'Deaths', value: snapshot.data!.deaths.toString()),
-                              ReuseableRow(title: 'Recovered', value: snapshot.data!.recovered.toString()),
-                              ReuseableRow(title: 'Active', value: snapshot.data!.active.toString()),
-                              ReuseableRow(title: 'Critical', value: snapshot.data!.critical.toString()),
-                              ReuseableRow(title: 'Today Deaths', value: snapshot.data!.todayDeaths.toString()),
-                              ReuseableRow(title: 'Today Recovered', value: snapshot.data!.todayRecovered.toString()),
-                              ReuseableRow(title: 'Today Cases', value: snapshot.data!.todayCases.toString()),
-                            ],
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 10),
+                            child: Text('Worldwide Stats',
+                              style: Theme.of(context).textTheme.titleLarge!.copyWith(fontWeight: FontWeight.bold),),
                           ),
-                        ),
-                        const SizedBox(height: 10,),
-                        ElevatedButton(
-                            onPressed: (){
-                              Navigator.push(context, MaterialPageRoute(builder: (context) => const CountriesScreen()));
-                            },
-                            child: const Text('Track Countries')),
-                      ],
-                    ),
-                  );
-                }
-                }
-            )),
+                          Card(
+                            child: Column(
+                              children: [
+                                ReuseableRow(title: 'Total', value: snapshot.data!.cases.toString()),
+                                ReuseableRow(title: 'Deaths', value: snapshot.data!.deaths.toString()),
+                                ReuseableRow(title: 'Recovered', value: snapshot.data!.recovered.toString()),
+                                ReuseableRow(title: 'Active', value: snapshot.data!.active.toString()),
+                                ReuseableRow(title: 'Critical', value: snapshot.data!.critical.toString()),
+                                ReuseableRow(title: 'Today Deaths', value: snapshot.data!.todayDeaths.toString()),
+                                ReuseableRow(title: 'Today Recovered', value: snapshot.data!.todayRecovered.toString()),
+                                ReuseableRow(title: 'Today Cases', value: snapshot.data!.todayCases.toString()),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(height: 10,),
+                          ElevatedButton(
+                              onPressed: (){
+                                Navigator.push(context, MaterialPageRoute(builder: (context) => const CountriesScreen()));
+                              },
+                              child: const Text('Track Countries')),
+                        ],
+                      ),
+                    );
+                  }
+                  }
+              )),
+        ),
       ),
     );
   }
