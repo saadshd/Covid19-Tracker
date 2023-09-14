@@ -1,0 +1,52 @@
+import 'package:covid19_tracker/view/countries_screen.dart';
+import 'package:covid19_tracker/view/world_stats_screen.dart';
+import 'package:flutter/material.dart';
+
+class NavBar extends StatefulWidget {
+  const NavBar({Key? key}) : super(key: key);
+
+
+  @override
+  State<NavBar> createState() => _NavBarState();
+}
+
+
+class _NavBarState extends State<NavBar> {
+  int index = 0;
+  final screens = [
+    const WorldStatsScreen(),
+    const CountriesScreen(),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+
+    return Scaffold(
+      body: screens[index],
+      bottomNavigationBar: NavigationBarTheme(
+        data: const NavigationBarThemeData(
+        ),
+        child: NavigationBar(
+          selectedIndex: index,
+          onDestinationSelected: (index) => setState(() => this.index = index),
+          destinations: const [
+            NavigationDestination(
+              tooltip: "Home",
+              icon: Icon(Icons.home_outlined),
+              label: 'Home',
+              selectedIcon: Icon(Icons.home),
+            ),
+            NavigationDestination(
+              tooltip: "Categories",
+              icon: Icon(Icons.category_outlined),
+              label: 'Categories',
+              selectedIcon: Icon(Icons.category),
+            ),
+          ],
+        ),
+      ),
+
+
+    );
+  }
+}

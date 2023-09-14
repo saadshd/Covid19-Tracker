@@ -1,5 +1,5 @@
-import 'package:covid19_tracker/ViewModel/world_states_view_model.dart';
-import 'package:covid19_tracker/Views/detail_screen.dart';
+import 'package:covid19_tracker/view/detail_screen.dart';
+import 'package:covid19_tracker/view_model/world_states_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 

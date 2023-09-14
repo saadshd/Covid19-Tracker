@@ -1,7 +1,7 @@
 import 'package:covid19_tracker/Model/world_stats_model.dart';
-import 'package:covid19_tracker/ViewModel/world_states_view_model.dart';
-import 'package:covid19_tracker/Views/Widgets/reuseable_row.dart';
-import 'package:covid19_tracker/Views/countries_screen.dart';
+import 'package:covid19_tracker/res/components/reuseable_row.dart';
+import 'package:covid19_tracker/view_model/world_states_view_model.dart';
+import 'package:covid19_tracker/view/countries_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:pie_chart/pie_chart.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -39,7 +39,7 @@ class _WorldStatsScreenState extends State<WorldStatsScreen> with TickerProvider
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.surfaceVariant,
-        title: const Text('COVID-19 Tracker'),
+        title: const Text('COVID-19 Stats'),
       ),
       body: RefreshIndicator(
         onRefresh: newWorldStatesViewModel.fetchData,

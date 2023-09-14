@@ -1,4 +1,4 @@
-import 'package:covid19_tracker/Views/splash_screen.dart';
+import 'package:covid19_tracker/view/splash_screen.dart';
 import 'package:flutter/material.dart';
 
 void main() {

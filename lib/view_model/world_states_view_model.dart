@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:covid19_tracker/ViewModel/Utilities/app_urls.dart';
+import 'package:covid19_tracker/res/app_urls.dart';
 import 'package:http/http.dart' as http;
 import 'package:covid19_tracker/Model/world_stats_model.dart';
 
