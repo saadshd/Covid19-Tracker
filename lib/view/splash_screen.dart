@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:covid19_tracker/view/world_stats_screen.dart';
+import 'package:covid19_tracker/res/components/nav_bar.dart';
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 
@@ -10,11 +10,11 @@ class SplashScreen extends StatefulWidget {
   State<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMixin{
-
+class _SplashScreenState extends State<SplashScreen>
+    with TickerProviderStateMixin {
   late final AnimationController _controller = AnimationController(
-      duration: const Duration(seconds: 3),
-      vsync: this,
+    duration: const Duration(seconds: 3),
+    vsync: this,
   )..repeat();
 
   @override
@@ -29,9 +29,10 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
     // TODO: implement initState
     super.initState();
 
-    Timer(const Duration(seconds: 5),
-        () => Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const WorldStatsScreen()))
-    );
+    Timer(
+        const Duration(seconds: 5),
+        () => Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => const NavBar())));
   }
 
   @override
@@ -50,24 +51,30 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
                 child: const Center(
                   child: Image(
                     fit: BoxFit.cover,
-                      image: AssetImage('images/virus.png'),
+                    image: AssetImage('images/virus.png'),
                   ),
                 ),
               ),
-              builder: (BuildContext context, Widget? child){
+              builder: (BuildContext context, Widget? child) {
                 return Transform.rotate(
-                    angle: _controller.value * 2.0 * math.pi,
-                child: child,
+                  angle: _controller.value * 2.0 * math.pi,
+                  child: child,
                 );
               },
             ),
-            SizedBox(height: MediaQuery.sizeOf(context).height * .08,),
+            SizedBox(
+              height: MediaQuery.sizeOf(context).height * .08,
+            ),
             Align(
               alignment: Alignment.center,
-                child: Text('COVID-19\nTracker',
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.headlineSmall!.copyWith(fontWeight: FontWeight.bold),
-                ),
+              child: Text(
+                'COVID-19\nTracker',
+                textAlign: TextAlign.center,
+                style: Theme.of(context)
+                    .textTheme
+                    .headlineSmall!
+                    .copyWith(fontWeight: FontWeight.bold),
+              ),
             ),
           ],
         ),

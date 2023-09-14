@@ -1,10 +1,11 @@
 import 'package:covid19_tracker/Model/world_stats_model.dart';
+import 'package:covid19_tracker/res/components/resueable_card.dart';
 import 'package:covid19_tracker/res/components/reuseable_row.dart';
+import 'package:covid19_tracker/res/components/spinner.dart';
+import 'package:covid19_tracker/utils/utils.dart';
 import 'package:covid19_tracker/view_model/world_states_view_model.dart';
-import 'package:covid19_tracker/view/countries_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:pie_chart/pie_chart.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class WorldStatsScreen extends StatefulWidget {
   const WorldStatsScreen({super.key});
@@ -13,19 +14,7 @@ class WorldStatsScreen extends StatefulWidget {
   State<WorldStatsScreen> createState() => _WorldStatsScreenState();
 }
 
-class _WorldStatsScreenState extends State<WorldStatsScreen> with TickerProviderStateMixin{
-
-  late final AnimationController _controller = AnimationController(
-    duration: const Duration(seconds: 3),
-    vsync: this,
-  )..repeat();
-
-  @override
-  void dispose() {
-    // TODO: implement dispose
-    _controller.dispose();
-    super.dispose();
-  }
+class _WorldStatsScreenState extends State<WorldStatsScreen> {
 
   final colorList = <Color> [
     Colors.blue,
@@ -43,77 +32,81 @@ class _WorldStatsScreenState extends State<WorldStatsScreen> with TickerProvider
       ),
       body: RefreshIndicator(
         onRefresh: newWorldStatesViewModel.fetchData,
-        child: Center(
-          child: SingleChildScrollView(
-              child: FutureBuilder(
-                future: newWorldStatesViewModel.fetchWorldRecords(),
-                  builder: (context,AsyncSnapshot<WorldStatsModel> snapshot){
-                  if(!snapshot.hasData){
-                    return SpinKitFadingCircle(
-                      color: Colors.green,
-                      size: 50.0,
-                      controller: _controller,
-                    );
-                  } else {
-                    return Padding(
-                      padding: const EdgeInsets.all(10),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          Card(
-                            child: Padding(
-                              padding: const EdgeInsets.all(15.0),
-                              child: PieChart(
-                                dataMap: {
-                                  "Total": double.parse(snapshot.data!.cases.toString()),
-                                  "Recovered": double.parse(snapshot.data!.recovered.toString()),
-                                  "Deaths": double.parse(snapshot.data!.deaths.toString()),
-                                },
-                                chartValuesOptions: const ChartValuesOptions(
-                                  showChartValuesInPercentage: true
-                                ),
-                                chartRadius: MediaQuery.sizeOf(context).height / 5,
-                                legendOptions: const LegendOptions(
-                                    legendPosition: LegendPosition.left
-                                ),
-                                animationDuration: const Duration(milliseconds: 1200),
-                                chartType: ChartType.ring,
-                                colorList: colorList,
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 10),
-                            child: Text('Worldwide Stats',
-                              style: Theme.of(context).textTheme.titleLarge!.copyWith(fontWeight: FontWeight.bold),),
-                          ),
-                          Card(
-                            child: Column(
-                              children: [
-                                ReuseableRow(title: 'Total', value: snapshot.data!.cases.toString()),
-                                ReuseableRow(title: 'Deaths', value: snapshot.data!.deaths.toString()),
-                                ReuseableRow(title: 'Recovered', value: snapshot.data!.recovered.toString()),
-                                ReuseableRow(title: 'Active', value: snapshot.data!.active.toString()),
-                                ReuseableRow(title: 'Critical', value: snapshot.data!.critical.toString()),
-                                ReuseableRow(title: 'Today Deaths', value: snapshot.data!.todayDeaths.toString()),
-                                ReuseableRow(title: 'Today Recovered', value: snapshot.data!.todayRecovered.toString()),
-                                ReuseableRow(title: 'Today Cases', value: snapshot.data!.todayCases.toString()),
-                              ],
-                            ),
-                          ),
-                          const SizedBox(height: 10,),
-                          ElevatedButton(
-                              onPressed: (){
-                                Navigator.push(context, MaterialPageRoute(builder: (context) => const CountriesScreen()));
+        child: SingleChildScrollView(
+            child: FutureBuilder(
+              future: newWorldStatesViewModel.fetchWorldRecords(),
+                builder: (context,AsyncSnapshot<WorldStatsModel> snapshot){
+                if(!snapshot.hasData){
+                  return const Spinner();
+                } else {
+                  return Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Card(
+                          child: Padding(
+                            padding: const EdgeInsets.all(15.0),
+                            child: PieChart(
+                              dataMap: {
+                                "Total": double.parse(snapshot.data!.cases.toString()),
+                                "Recovered": double.parse(snapshot.data!.recovered.toString()),
+                                "Deaths": double.parse(snapshot.data!.deaths.toString()),
                               },
-                              child: const Text('Track Countries')),
-                        ],
-                      ),
-                    );
-                  }
-                  }
-              ),
-          ),
+                              chartValuesOptions: const ChartValuesOptions(
+                                showChartValuesInPercentage: true
+                              ),
+                              chartRadius: MediaQuery.sizeOf(context).height / 5,
+                              legendOptions: const LegendOptions(
+                                  legendPosition: LegendPosition.left
+                              ),
+                              animationDuration: const Duration(milliseconds: 1200),
+                              chartType: ChartType.ring,
+                              colorList: colorList,
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: Text('Worldwide Stats',
+                            textAlign: TextAlign.start,
+                            style: Theme.of(context).textTheme.titleLarge!.copyWith(fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        Row(
+                          children: [
+                            ReuseableCard(
+                                title: 'TOTAL CASES',
+                                number: Utils.formatNumber(snapshot.data!.cases),
+                                color: Colors.blue,
+                            ),
+                            ReuseableCard(
+                                title: 'TOTAL DEATHS',
+                                number: Utils.formatNumber(snapshot.data!.deaths),
+                                color: Colors.red,
+                            ),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            ReuseableCard(
+                                title: 'TOTAL RECOVERED',
+                                number: Utils.formatNumber(snapshot.data!.recovered),
+                                color: Colors.green,
+                            ),
+                            ReuseableCard(
+                                title: 'ACTIVE CASES',
+                                number: Utils.formatNumber(snapshot.data!.active),
+                                color: Colors.orange,
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  );
+                }
+              }
+            ),
         ),
       ),
     );

@@ -1,9 +1,13 @@
+import 'package:covid19_tracker/res/components/resueable_card.dart';
 import 'package:covid19_tracker/res/components/reuseable_row.dart';
+import 'package:covid19_tracker/utils/utils.dart';
 import 'package:flutter/material.dart';
+import 'package:pie_chart/pie_chart.dart';
 
 class DetailScreen extends StatefulWidget {
   String name, image;
-  int totalCases, totalDeaths, totalRecovered, active, critical, todayRecovered, test;
+  int totalCases, totalDeaths, totalRecovered, active;
+
   DetailScreen({
     super.key,
     required this.name,
@@ -12,9 +16,6 @@ class DetailScreen extends StatefulWidget {
     required this.totalCases,
     required this.totalRecovered,
     required this.active,
-    required this.critical,
-    required this.todayRecovered,
-    required this.test,
   });
 
   @override
@@ -22,45 +23,83 @@ class DetailScreen extends StatefulWidget {
 }
 
 class _DetailScreenState extends State<DetailScreen> {
+  final colorList = <Color>[
+    Colors.blue,
+    Colors.green,
+    Colors.red,
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.surfaceVariant,
-        title: Text(widget.name),
+        title: Row(
+          children: [
+            Image(
+              height: 50,
+              width: 50,
+              image: NetworkImage(widget.image),
+            ),
+            const SizedBox(
+              width: 10,
+            ),
+            Text(widget.name),
+          ],
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(10),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Stack(
-              alignment: Alignment.topCenter,
-              children: [
-                Padding(
-                  padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * .067),
-                  child: Card(
-                    child: Column(
-                      children: [
-                        SizedBox(height: MediaQuery.of(context).size.height * .06),
-                        ReuseableRow(title: 'Cases', value: widget.totalCases.toString()),
-                        ReuseableRow(title: 'Deaths', value: widget.totalDeaths.toString()),
-                        ReuseableRow(title: 'Recovered', value: widget.totalRecovered.toString()),
-                        ReuseableRow(title: 'Active', value: widget.active.toString()),
-                        ReuseableRow(title: 'Critical', value: widget.critical.toString()),
-                        ReuseableRow(title: 'Today Recovered', value: widget.todayRecovered.toString()),
-                        ReuseableRow(title: 'Tests', value: widget.test.toString()),
-                      ],
-                    ),
-                  ),
+            Card(
+              child: Padding(
+                padding: const EdgeInsets.all(15.0),
+                child: PieChart(
+                  dataMap: {
+                    "Total": double.parse(widget.totalCases.toString()),
+                    "Recovered": double.parse(widget.totalRecovered.toString()),
+                    "Deaths": double.parse(widget.totalDeaths.toString()),
+                  },
+                  chartValuesOptions: const ChartValuesOptions(
+                      showChartValuesInPercentage: true),
+                  chartRadius: MediaQuery.sizeOf(context).height / 5,
+                  legendOptions:
+                      const LegendOptions(legendPosition: LegendPosition.left),
+                  animationDuration: const Duration(milliseconds: 1200),
+                  chartType: ChartType.ring,
+                  colorList: colorList,
                 ),
-                CircleAvatar(
-                  radius: 50,
-                  backgroundImage: NetworkImage(widget.image),
-                )
-              ]
+              ),
+            ),
+            Row(
+              children: [
+                ReuseableCard(
+                  title: 'TOTAL CASES',
+                  number: Utils.formatNumber(widget.totalCases),
+                  color: Colors.blue,
+                ),
+                ReuseableCard(
+                  title: 'TOTAL DEATHS',
+                  number: Utils.formatNumber(widget.totalDeaths),
+                  color: Colors.red,
+                ),
+              ],
+            ),
+            Row(
+              children: [
+                ReuseableCard(
+                  title: 'TOTAL RECOVERED',
+                  number: Utils.formatNumber(widget.totalRecovered),
+                  color: Colors.green,
+                ),
+                ReuseableCard(
+                  title: 'ACTIVE CASES',
+                  number: Utils.formatNumber(widget.active),
+                  color: Colors.orange,
+                ),
+              ],
             ),
           ],
         ),

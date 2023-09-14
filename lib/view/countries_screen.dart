@@ -1,7 +1,7 @@
+import 'package:covid19_tracker/res/components/spinner.dart';
 import 'package:covid19_tracker/view/detail_screen.dart';
 import 'package:covid19_tracker/view_model/world_states_view_model.dart';
 import 'package:flutter/material.dart';
-import 'package:shimmer/shimmer.dart';
 
 class CountriesScreen extends StatefulWidget {
   const CountriesScreen({super.key});
@@ -11,7 +11,6 @@ class CountriesScreen extends StatefulWidget {
 }
 
 class _CountriesScreenState extends State<CountriesScreen> {
-
   final searchController = TextEditingController();
 
   @override
@@ -20,136 +19,127 @@ class _CountriesScreenState extends State<CountriesScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.surfaceVariant,
-        title: const Text('Track Countries'),
+        title: const Text('Countries'),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(10),
+        padding: const EdgeInsets.symmetric(horizontal: 10),
         child: Column(
           children: [
+            const SizedBox(
+              height: 10,
+            ),
             TextFormField(
-              onChanged: (value){
-                setState(() {
-
-                });
+              onChanged: (value) {
+                setState(() {});
               },
               controller: searchController,
               decoration: InputDecoration(
                 contentPadding: const EdgeInsets.symmetric(horizontal: 20),
                 hintText: 'Search with country name',
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(50.0)
-                ),
-                suffixIcon: searchController.text.isEmpty ? const Icon(Icons.search) :
-                    GestureDetector(
-                      onTap: (){
-                        searchController.text = "";
-                        setState(() {
-
-                        });
-                      },
-                      child: const Icon(Icons.clear),
-                    ),
+                    borderRadius: BorderRadius.circular(50.0)),
+                suffixIcon: searchController.text.isEmpty
+                    ? const Icon(Icons.search)
+                    : GestureDetector(
+                        onTap: () {
+                          searchController.text = "";
+                          setState(() {});
+                        },
+                        child: const Icon(Icons.clear),
+                      ),
               ),
             ),
             Expanded(
-                child: FutureBuilder(
+              child: FutureBuilder(
                   future: newWorldStatesViewModel.fetchCountriesRecords(),
-                  builder: (context, AsyncSnapshot<List<dynamic>> snapshot){
-                    if(!snapshot.hasData){
-                     return ListView.builder(
-                         itemCount: 4,
-                         itemBuilder: (context, index){
-                           return Shimmer.fromColors(
-                             baseColor: Colors.grey.shade300,
-                             highlightColor: Colors.grey.shade50,
-                             child: Column(
-                               children: [
-                                 ListTile(
-                                   leading: Container(height: 50, width: 50, color: Colors.white,),
-                                   title: Container(height: 10, width: 80, color: Colors.white,),
-                                   subtitle: Container(height: 10, width: 80, color: Colors.white,),
-                                 ),
-                                 Container(height: 5, width: MediaQuery.sizeOf(context).width, color: Colors.white,)
-                               ],
-                             ),
-                           );
-                         }
-                     );
+                  builder: (context, AsyncSnapshot<List<dynamic>> snapshot) {
+                    if (!snapshot.hasData) {
+                      return const Spinner();
                     } else {
                       return ListView.builder(
-                        itemCount: snapshot.data!.length,
-                          itemBuilder: (context, index){
-                          String name = snapshot.data![index]['country'];
-                          if(searchController.text.isEmpty){
-                            return Column(
-                              children: [
-                                InkWell(
-                                  onTap: (){
-                                    Navigator.push(context, MaterialPageRoute(builder: (context) => DetailScreen(
-                                      name: snapshot.data![index]['country'],
-                                      image: snapshot.data![index]['countryInfo']['flag'],
-                                      totalCases: snapshot.data![index]['cases'],
-                                      totalRecovered: snapshot.data![index]['recovered'],
-                                      totalDeaths: snapshot.data![index]['deaths'],
-                                      active: snapshot.data![index]['active'],
-                                      test: snapshot.data![index]['tests'],
-                                      todayRecovered: snapshot.data![index]['todayRecovered'],
-                                      critical: snapshot.data![index]['critical'],
-                                    )
-                                    ));
-                                  },
-                                  child: ListTile(
-                                    leading: Image(
-                                      height: 50,
-                                      width: 50,
-                                      image: NetworkImage(snapshot.data![index]['countryInfo']['flag']),
-                                    ),
-                                    title: Text(snapshot.data![index]['country']),
-                                    subtitle: Text('Cases: ${snapshot.data![index]['cases']}'),
+                          itemCount: snapshot.data!.length,
+                          itemBuilder: (context, index) {
+                            String name = snapshot.data![index]['country'];
+                            if (searchController.text.isEmpty) {
+                              return Card(
+                                child: ListTile(
+                                  leading: Image(
+                                    height: 40,
+                                    width: 40,
+                                    image: NetworkImage(
+                                        snapshot.data![index]['countryInfo']
+                                            ['flag']),
                                   ),
-                                ),
-                                const Divider(),
-                              ],
-                            );
-                          } else if(name.toLowerCase().contains(searchController.text.toLowerCase())){
-                            return Column(
-                              children: [
-                                InkWell(
-                                  onTap: (){
-                                    Navigator.push(context, MaterialPageRoute(builder: (context) => DetailScreen(
-                                      name: snapshot.data![index]['country'],
-                                      image: snapshot.data![index]['countryInfo']['flag'],
-                                      totalCases: snapshot.data![index]['cases'],
-                                      totalRecovered: snapshot.data![index]['recovered'],
-                                      totalDeaths: snapshot.data![index]['deaths'],
-                                      active: snapshot.data![index]['active'],
-                                      test: snapshot.data![index]['tests'],
-                                      todayRecovered: snapshot.data![index]['todayRecovered'],
-                                      critical: snapshot.data![index]['critical'],
-                                    )
-                                    ));
-                                  },
-                                  child: ListTile(
-                                    leading: Image(
-                                      height: 50,
-                                      width: 50,
-                                      image: NetworkImage(snapshot.data![index]['countryInfo']['flag']),
+                                  title: Text(
+                                      snapshot.data![index]['country'],
+                                    style: const TextStyle(
+                                      color: Colors.green,
                                     ),
-                                    title: Text(snapshot.data![index]['country']),
-                                    subtitle: Text('Cases: ${snapshot.data![index]['cases']}'),
                                   ),
+                                  subtitle: Text(
+                                      'Cases: ${snapshot.data![index]['cases']}'),
+                                  trailing: const Icon(Icons.navigate_next),
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => DetailScreen(
+                                          name: snapshot.data![index]['country'],
+                                          image: snapshot.data![index]['countryInfo']['flag'],
+                                          totalCases: snapshot.data![index]['cases'],
+                                          totalRecovered: snapshot.data![index]['recovered'],
+                                          totalDeaths: snapshot.data![index]['deaths'],
+                                          active: snapshot.data![index]['active'],
+                                        ),
+                                      ),
+                                    );
+                                  },
                                 ),
-                                const Divider(),
-                              ],
-                            );
-                          } else {
-                            return Container();
-                          }
-                          }
+                              );
+                            } else if (name.toLowerCase().contains(
+                                searchController.text.toLowerCase())) {
+                              return Card(
+                                child: ListTile(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => DetailScreen(
+                                          name: snapshot.data![index]['country'],
+                                          image: snapshot.data![index]['countryInfo']['flag'],
+                                          totalCases: snapshot.data![index]['cases'],
+                                          totalRecovered: snapshot.data![index]['recovered'],
+                                          totalDeaths: snapshot.data![index]['deaths'],
+                                          active: snapshot.data![index]['active'],
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                  leading: Image(
+                                    height: 50,
+                                    width: 50,
+                                    image: NetworkImage(
+                                        snapshot.data![index]['countryInfo']['flag']),
+                                  ),
+                                  trailing: const Icon(Icons.navigate_next),
+                                  title: Text(
+                                      snapshot.data![index]['country'],
+                                    style: const TextStyle(
+                                      color: Colors.green,
+                                    ),
+                                  ),
+                                  subtitle: Text(
+                                      'Cases: ${snapshot.data![index]['cases']}'),
+                                ),
+                              );
+                            } else {
+                              return Container();
+                            }
+                          },
                       );
                     }
-                  }
-                ),
+                  },
+              ),
             ),
           ],
         ),
