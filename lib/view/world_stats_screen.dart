@@ -112,7 +112,8 @@ class _WorldStatsScreenState extends State<WorldStatsScreen> with TickerProvider
                     );
                   }
                   }
-              )),
+              ),
+          ),
         ),
       ),
     );
